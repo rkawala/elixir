@@ -1,4 +1,6 @@
 defmodule KitchenCalculator do
+  @conversions %{milliliter: 1, teaspoon: 5, tablespoon: 15, fluid_ounce: 30, cup: 240}
+
   def get_volume(volume_pair) do
     elem(volume_pair, 1)
   end
@@ -15,12 +17,8 @@ defmodule KitchenCalculator do
     from_milliliter(to_milliliter(volume_pair), unit)
   end
 
-  defp get_conversions() do
-    %{milliliter: 1, teaspoon: 5, tablespoon: 15, fluid_ounce: 30, cup: 240}
-  end
-
   defp lookup_conversion_factor(key) when is_atom(key) do
-    get_conversions()[key]
+    @conversions[key]
   end
 
   defp lookup_conversion_factor(volume_pair) do
