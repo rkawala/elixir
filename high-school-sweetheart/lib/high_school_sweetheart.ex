@@ -14,7 +14,7 @@ defmodule HighSchoolSweetheart do
   end
 
   def initials(full_name) do
-    Enum.map_join(split(full_name), " ", fn name-> initial(name) end)
+    Enum.map_join(split(full_name), " ", &initial/1)
   end
 
   def pair(full_name1, full_name2) do
