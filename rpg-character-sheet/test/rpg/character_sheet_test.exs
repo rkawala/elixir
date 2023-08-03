@@ -108,9 +108,6 @@ defmodule RPG.CharacterSheetTest do
       case Regex.run(~r/.*(Your character.*)%{/, io) do
         [_, label] ->
           assert label == "Your character: "
-
-        _ ->
-          nil
       end
     end
 
