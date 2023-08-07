@@ -5,43 +5,14 @@ defmodule WineCellar do
     rose: "Fermented with some skin contact, but not enough to qualify as a red wine."
   ]
 
-  def explain_colors do
+  @tuple_elements %{ year: 1, country: 2 }
+
+  def explain_colors() do
     @color_explanations
   end
 
   def filter(cellar, color, opts \\ []) do
-    fn_map = make_fn_map()
-    filtered_by_color = Enum.filter(cellar, &(elem(&1, 0) == color))
-    bottles = Enum.map(filtered_by_color, &(elem(&1, 1)))
-    Enum.reduce(opts, bottles, fn opt, acc -> fn_map[elem(opt, 0)].(acc, elem(opt, 1)) end)
+    bottles = Keyword.get_values(cellar, color)
+    Enum.reduce(opts, bottles, fn opt, acc -> Enum.filter(acc, fn bottle -> elem(bottle, @tuple_elements[elem(opt, 0)]) == elem(opt, 1) end) end)
   end
-
-  # The functions below do not need to be modified.
-
-  defp filter_by_year(wines, year)
-  defp filter_by_year([], _year), do: []
-
-  defp filter_by_year([{_, year, _} = wine | tail], year) do
-    [wine | filter_by_year(tail, year)]
-  end
-
-  defp filter_by_year([{_, _, _} | tail], year) do
-    filter_by_year(tail, year)
-  end
-
-  defp filter_by_country(wines, country)
-  defp filter_by_country([], _country), do: []
-
-  defp filter_by_country([{_, _, country} = wine | tail], country) do
-    [wine | filter_by_country(tail, country)]
-  end
-
-  defp filter_by_country([{_, _, _} | tail], country) do
-    filter_by_country(tail, country)
-  end
-
-  defp make_fn_map(), do: %{
-      year: &filter_by_year/2,
-      country: &filter_by_country/2
-    }
 end
