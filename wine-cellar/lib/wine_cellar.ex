@@ -1,10 +1,19 @@
 defmodule WineCellar do
+  @color_explanations [
+    white: "Fermented without skin contact.",
+    red: "Fermented with skin contact using dark-colored grapes.",
+    rose: "Fermented with some skin contact, but not enough to qualify as a red wine."
+  ]
+
   def explain_colors do
-    # Please implement the explain_colors/0 function
+    @color_explanations
   end
 
   def filter(cellar, color, opts \\ []) do
-    # Please implement the filter/3 function
+    fn_map = make_fn_map()
+    filtered_by_color = Enum.filter(cellar, &(elem(&1, 0) == color))
+    bottles = Enum.map(filtered_by_color, &(elem(&1, 1)))
+    Enum.reduce(opts, bottles, fn opt, acc -> fn_map[elem(opt, 0)].(acc, elem(opt, 1)) end)
   end
 
   # The functions below do not need to be modified.
@@ -30,4 +39,9 @@ defmodule WineCellar do
   defp filter_by_country([{_, _, _} | tail], country) do
     filter_by_country(tail, country)
   end
+
+  defp make_fn_map(), do: %{
+      year: &filter_by_year/2,
+      country: &filter_by_country/2
+    }
 end
