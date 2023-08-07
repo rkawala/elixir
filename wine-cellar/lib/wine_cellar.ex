@@ -13,6 +13,12 @@ defmodule WineCellar do
 
   def filter(cellar, color, opts \\ []) do
     bottles = Keyword.get_values(cellar, color)
-    Enum.reduce(opts, bottles, fn opt, acc -> Enum.filter(acc, fn bottle -> elem(bottle, @tuple_elements[elem(opt, 0)]) == elem(opt, 1) end) end)
+    Enum.reduce(opts, bottles, fn opt, acc -> retain_bottles_matching_opt(acc, opt) end)
+  end
+
+  def retain_bottles_matching_opt(bottles, opt) do
+    { opt_key, opt_value } = opt
+    opt_column_number = @tuple_elements[opt_key]
+    Enum.filter(bottles, fn bottle -> elem(bottle, opt_column_number) == opt_value end)
   end
 end
