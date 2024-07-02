@@ -36,9 +36,6 @@ defmodule FileSniffer do
 
   defp type_from_lambda(lambda) do
     entry = Enum.find(@types, lambda)
-    cond do
-      entry -> entry.desc
-      true -> nil
-    end
+    entry && entry.desc
   end
 end
